@@ -7,9 +7,8 @@ import { initializeBlogs } from "./reducers/blogsReducer";
 
 import Notification from "./components/Notification";
 
-import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
-import CreateNewBlogForm from "./components/CreateNewBlogForm";
+import BlogForm from "./components/BlogForm";
 import BlogList from "./components/BlogList";
 
 import Togglable from "./components/Togglable";
@@ -19,7 +18,6 @@ import loginService from "./services/login";
 
 const App = () => {
   //state
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
 
   //dispatch
@@ -78,61 +76,6 @@ const App = () => {
     dispatch(setNotification("success", "successfully logged out", 2));
   };
 
-  const handleCreateNewBlog = async (newBlog) => {
-    try {
-      const addedBlog = await blogService.create({
-        title: newBlog.title,
-        author: newBlog.author,
-        url: newBlog.url,
-      });
-      //console.log(addedBlog)
-
-      const refeshedBlogsList = await blogService.getAll();
-      setBlogs(refeshedBlogsList);
-
-      createNewBlogFormRef.current.toggleVisibility();
-
-      dispatch(
-        setNotification(
-          "success",
-          `successfully added blog '${addedBlog.title}' by '${addedBlog.author}'`,
-          3
-        )
-      );
-    } catch (exception) {
-      console.error("adding a blog failed: ", exception.response.data);
-
-      dispatch(setNotification("error", exception.response.data.error, 5));
-    }
-  };
-
-  const handleLikeClicked = async ({ event, blog }) => {
-    event.preventDefault();
-
-    const newBlog = {
-      id: blog.id,
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-    };
-
-    await blogService.update(newBlog);
-
-    refreshBlogs();
-  };
-
-  const handleDeleteClicked = async ({ event, blog }) => {
-    event.preventDefault();
-
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      console.log(`user confirmed deletion of blog '${blog.title}'`);
-      await blogService.remove(blog);
-      refreshBlogs();
-      console.log("refresh after blog deletion done.");
-    }
-  };
-
   //effect hooks
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBloglistAppUser");
@@ -142,19 +85,6 @@ const App = () => {
       setUser(user);
     }
   }, []);
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(sortedBlogs);
-    });
-  }, []);
-
-  const refreshBlogs = async () => {
-    const blogs = await blogService.getAll();
-    const sortedBlogs = blogs.sort((a, b) => b.likes - a.likes);
-    setBlogs(sortedBlogs);
-  };
 
   //components rendering functions
   const renderLoginForm = () => {
@@ -185,7 +115,7 @@ const App = () => {
         <Togglable buttonLabel="create new blog" ref={createNewBlogFormRef}>
           <h2>create a new blog entry</h2>
 
-          <CreateNewBlogForm createNewBlogEntry={handleCreateNewBlog} />
+          <BlogForm />
         </Togglable>
 
         <h2>blogs list</h2>

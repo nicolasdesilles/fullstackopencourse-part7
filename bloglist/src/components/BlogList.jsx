@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { addLikeTo } from "../reducers/blogsReducer";
+import { addLikeTo, deleteBlog } from "../reducers/blogsReducer";
 import { setNotification } from "../reducers/notificationsReducer";
 
 import Blog from "./Blog";
@@ -14,23 +14,11 @@ const BlogList = () => {
     dispatch(setNotification("success", `you liked '${blog.title}'`, 4));
   };
 
-  /*
-  return (
-    <div>
-      {blogs.map((blog) => (
-        <div key={blog.id}>
-          <div>{blog.title}</div>
-          <div>by {blog.author}</div>
-          <div>by {blog.url}</div>
-          <div>
-            has {blog.likes} likes
-            <button onClick={() => like(blog)}>like</button>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-  */
+  const remove = async (blog) => {
+    console.log("delete", blog.id);
+    dispatch(deleteBlog(blog));
+    dispatch(setNotification("success", `you deleted '${blog.title}'`, 4));
+  };
 
   return (
     <div>
@@ -39,7 +27,7 @@ const BlogList = () => {
           key={blog.id}
           blog={blog}
           onLikeClicked={() => like(blog)}
-          onDeleteClicked={() => console.log(`deleting ${blog.id}`)}
+          onDeleteClicked={() => remove(blog)}
         />
       ))}
     </div>

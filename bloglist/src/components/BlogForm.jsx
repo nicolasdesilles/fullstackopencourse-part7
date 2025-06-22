@@ -1,20 +1,34 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
-const CreateNewBlogForm = ({ createNewBlogEntry }) => {
-  //state
+import { createBlog } from "../reducers/blogsReducer";
+import { setNotification } from "../reducers/notificationsReducer";
+
+const BlogForm = () => {
+  //local state
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  //submit blog func
-  const addNewBlog = (event) => {
+  const dispatch = useDispatch();
+
+  const addNewBlog = async (event) => {
     event.preventDefault();
 
-    createNewBlogEntry({
+    const content = {
       title: title,
       author: author,
       url: url,
-    });
+    };
+
+    dispatch(createBlog(content));
+    dispatch(
+      setNotification(
+        "success",
+        `you added '${content.title}' by '${content.author}'`,
+        4
+      )
+    );
 
     setTitle("");
     setAuthor("");
@@ -31,7 +45,6 @@ const CreateNewBlogForm = ({ createNewBlogEntry }) => {
             value={title}
             name="Title"
             onChange={({ target }) => setTitle(target.value)}
-            data-testid="newblogform-titleinput"
           />
         </div>
         <div>
@@ -41,7 +54,6 @@ const CreateNewBlogForm = ({ createNewBlogEntry }) => {
             value={author}
             name="Author"
             onChange={({ target }) => setAuthor(target.value)}
-            data-testid="newblogform-authorinput"
           />
         </div>
         <div>
@@ -51,15 +63,12 @@ const CreateNewBlogForm = ({ createNewBlogEntry }) => {
             value={url}
             name="URL"
             onChange={({ target }) => setUrl(target.value)}
-            data-testid="newblogform-urlinput"
           />
         </div>
-        <button type="submit" data-testid="newblogform-submitbutton">
-          create
-        </button>
+        <button type="submit">create</button>
       </form>
     </div>
   );
 };
 
-export default CreateNewBlogForm;
+export default BlogForm;

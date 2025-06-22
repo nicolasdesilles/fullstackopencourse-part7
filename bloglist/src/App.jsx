@@ -1,10 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 
+import { useDispatch, useSelector } from "react-redux";
+import { setNotification } from "./reducers/notificationsReducer";
+
+import Notification from "./components/Notification";
+
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import CreateNewBlogForm from "./components/CreateNewBlogForm";
-import SuccessNotification from "./components/SuccessNotification";
-import ErrorNotification from "./components/ErrorNotification";
+
 import Togglable from "./components/Togglable";
 
 import blogService from "./services/blogs";
@@ -12,17 +16,23 @@ import loginService from "./services/login";
 
 const App = () => {
   //state
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+
+  //dispatch
+  const dispatch = useDispatch();
+
+  //Redux
+  const notification = useSelector((state) => state.notification);
 
   //references
   const createNewBlogFormRef = useRef();
 
   //event handlers
   const handleLogin = async ({ username, password }) => {
-    console.log(`login with username = ${username} and password = ${password}`);
+    console.log(
+      `trying login with username = ${username} and password = ${password}`
+    );
 
     try {
       const user = await loginService.login({
@@ -32,22 +42,22 @@ const App = () => {
 
       window.localStorage.setItem(
         "loggedBloglistAppUser",
-        JSON.stringify(user),
+        JSON.stringify(user)
       );
       blogService.setToken(user.token);
 
-      setSuccessMessage(`successfully logged in as ${user.username}`);
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 3000);
+      dispatch(
+        setNotification(
+          "success",
+          `successfully logged in as ${user.username}`,
+          4
+        )
+      );
 
       setUser(user);
     } catch (exception) {
       console.error("login failed: wrong credentials");
-      setErrorMessage("wrong username or password");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+      dispatch(setNotification("error", "wrong userame or password", 2));
     }
   };
 
@@ -57,10 +67,7 @@ const App = () => {
     window.localStorage.removeItem("loggedBloglistAppUser");
     setUser(null);
 
-    setSuccessMessage("successfully logged out");
-    setTimeout(() => {
-      setSuccessMessage(null);
-    }, 3000);
+    dispatch(setNotification("success", "successfully logged out", 2));
   };
 
   const handleCreateNewBlog = async (newBlog) => {
@@ -77,18 +84,17 @@ const App = () => {
 
       createNewBlogFormRef.current.toggleVisibility();
 
-      setSuccessMessage(
-        `successfully added blog '${addedBlog.title}' by '${addedBlog.author}'`,
+      dispatch(
+        setNotification(
+          "success",
+          `successfully added blog '${addedBlog.title}' by '${addedBlog.author}'`,
+          3
+        )
       );
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 3000);
     } catch (exception) {
       console.error("adding a blog failed: ", exception.response.data);
-      setErrorMessage(exception.response.data.error);
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 3000);
+
+      dispatch(setNotification("error", exception.response.data.error, 5));
     }
   };
 
@@ -190,8 +196,7 @@ const App = () => {
 
   return (
     <div>
-      <SuccessNotification message={successMessage} />
-      <ErrorNotification message={errorMessage} />
+      <Notification type={notification.type} />
 
       {user === null ? renderLoginForm() : renderBlogsList()}
     </div>

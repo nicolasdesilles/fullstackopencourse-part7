@@ -1,18 +1,26 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
-const LoginForm = ({ attemptLogin }) => {
+import { login } from "../reducers/userReducer";
+
+const LoginForm = () => {
+  //dispatch
+  const dispatch = useDispatch();
+
   //state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   //submit handler func
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
 
-    attemptLogin({
-      username: username,
-      password: password,
-    });
+    dispatch(
+      login({
+        username: username,
+        password: password,
+      })
+    );
 
     setUsername("");
     setPassword("");
@@ -28,7 +36,6 @@ const LoginForm = ({ attemptLogin }) => {
             value={username}
             name="Username"
             onChange={({ target }) => setUsername(target.value)}
-            data-testid="login-username"
           />
         </div>
         <div>
@@ -38,7 +45,6 @@ const LoginForm = ({ attemptLogin }) => {
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
-            data-testid="login-password"
           />
         </div>
         <button type="submit" data-testid="login-button">

@@ -3,11 +3,14 @@ import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotification } from "./reducers/notificationsReducer";
 
+import { initializeBlogs } from "./reducers/blogsReducer";
+
 import Notification from "./components/Notification";
 
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import CreateNewBlogForm from "./components/CreateNewBlogForm";
+import BlogList from "./components/BlogList";
 
 import Togglable from "./components/Togglable";
 
@@ -21,6 +24,11 @@ const App = () => {
 
   //dispatch
   const dispatch = useDispatch();
+
+  //effect
+  useEffect(() => {
+    dispatch(initializeBlogs());
+  });
 
   //Redux
   const notification = useSelector((state) => state.notification);
@@ -182,14 +190,7 @@ const App = () => {
 
         <h2>blogs list</h2>
 
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            onLikeClicked={(event) => handleLikeClicked({ event, blog })}
-            onDeleteClicked={(event) => handleDeleteClicked({ event, blog })}
-          />
-        ))}
+        <BlogList />
       </div>
     );
   };

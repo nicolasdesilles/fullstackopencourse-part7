@@ -49,7 +49,7 @@ const update = async (updatedBlog) => {
   const response = await axios.put(
     `${baseUrl}/${updatedBlog.id}`,
     newBlog,
-    config,
+    config
   );
   return response.data;
 };

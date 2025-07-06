@@ -4,7 +4,7 @@ const Blog = ({ blog, onLikeClicked, onDeleteClicked }) => {
   const [visible, setVisible] = useState(false);
 
   const loggedUserJSON = window.localStorage.getItem("loggedBloglistAppUser");
-  const loggedUser = JSON.parse(loggedUserJSON);
+  const loggedUser = loggedUserJSON ? JSON.parse(loggedUserJSON) : null;
 
   const hideWhenVisible = { display: visible ? "none" : "" };
   const showWhenVisible = { display: visible ? "" : "none" };

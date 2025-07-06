@@ -1,89 +1,68 @@
-import { useEffect, useRef } from "react";
-
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getLoggedInUser } from "./reducers/loggedUserReducer";
 
-import { initializeBlogs } from "./reducers/blogsReducer";
-import { getLoggedInUser, logout } from "./reducers/userReducer";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
 import Notification from "./components/Notification";
 
 import LoginForm from "./components/LoginForm";
-import BlogForm from "./components/BlogForm";
-import BlogList from "./components/BlogList";
-
-import Togglable from "./components/Togglable";
+import Home from "./components/Home";
+import UsersList from "./components/UsersList";
+import Header from "./components/Header";
 
 const App = () => {
-  //dispatch
   const dispatch = useDispatch();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   //effect
   useEffect(() => {
-    dispatch(initializeBlogs());
-  });
-
-  useEffect(() => {
-    getLoggedInUser();
-  }, []);
+    const initializeApp = async () => {
+      await dispatch(getLoggedInUser());
+      setIsInitialized(true);
+    };
+    initializeApp();
+  }, [dispatch]);
 
   //Redux
   const notification = useSelector((state) => state.notification);
-  const user = useSelector((state) => state.user);
+  const loggedUser = useSelector((state) => state.loggedUser);
 
-  //references
-  const createNewBlogFormRef = useRef();
+  //console.log("App rendered, loggedUser:", loggedUser, "isInitialized:", isInitialized);
 
-  //event handlers
-  const handleLogout = (event) => {
-    event.preventDefault();
-
-    dispatch(logout(user));
-  };
-
-  //components rendering functions
-  const renderLoginForm = () => {
-    return (
-      <div>
-        <h2>log in to the app</h2>
-        <LoginForm />
-      </div>
-    );
-  };
-
-  const renderBlogsList = () => {
-    const logoutButtonStyle = {
-      margin: "5px",
-    };
-
-    return (
-      <div>
-        <h1>blogs</h1>
-
-        <div>
-          <span>User {user.name} is logged in</span>
-          <span style={logoutButtonStyle}>
-            <button onClick={handleLogout}>logout</button>
-          </span>
-        </div>
-
-        <Togglable buttonLabel="create new blog" ref={createNewBlogFormRef}>
-          <h2>create a new blog entry</h2>
-
-          <BlogForm />
-        </Togglable>
-
-        <h2>blogs list</h2>
-
-        <BlogList />
-      </div>
-    );
-  };
+  if (!isInitialized) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>
       <Notification type={notification.type} />
 
-      {user === null ? renderLoginForm() : renderBlogsList()}
+      {loggedUser ? <Header /> : ""}
+
+      <Router>
+        <Routes>
+          <Route
+            path="/login"
+            element={loggedUser ? <Navigate replace to="/" /> : <LoginForm />}
+          />
+          <Route
+            path="/"
+            element={loggedUser ? <Home /> : <Navigate replace to="/login" />}
+          />
+          <Route
+            path="/users"
+            element={
+              loggedUser ? <UsersList /> : <Navigate replace to="/login" />
+            }
+          />
+        </Routes>
+      </Router>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { login } from "../reducers/userReducer";
+import { login } from "../reducers/loggedUserReducer";
 
 const LoginForm = () => {
   //dispatch
@@ -15,7 +15,7 @@ const LoginForm = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    dispatch(
+    await dispatch(
       login({
         username: username,
         password: password,
@@ -24,10 +24,13 @@ const LoginForm = () => {
 
     setUsername("");
     setPassword("");
+
+    // Remove the immediate navigation - let the router handle it based on state
   };
 
   return (
     <div>
+      <h2>log in to the app</h2>
       <form onSubmit={onSubmit}>
         <div>
           username

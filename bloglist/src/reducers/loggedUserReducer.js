@@ -4,17 +4,17 @@ import blogService from "../services/blogs";
 
 import { setNotification } from "./notificationsReducer";
 
-const userSlice = createSlice({
-  name: "user",
+const loggedUserSlice = createSlice({
+  name: "loggedUser",
   initialState: null,
   reducers: {
-    setUser(state, action) {
+    setLoggedUser(state, action) {
       return action.payload;
     },
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setLoggedUser } = loggedUserSlice.actions;
 
 export const login = ({ username, password }) => {
   return async (dispatch) => {
@@ -42,7 +42,7 @@ export const login = ({ username, password }) => {
         )
       );
 
-      dispatch(setUser(user));
+      dispatch(setLoggedUser(user));
     } catch (exception) {
       console.error("login failed: wrong credentials");
       dispatch(setNotification("error", "wrong userame or password", 2));
@@ -53,10 +53,11 @@ export const login = ({ username, password }) => {
 export const getLoggedInUser = () => {
   return async (dispatch) => {
     const loggedUserJSON = window.localStorage.getItem("loggedBloglistAppUser");
+    //console.log("local storage", loggedUserJSON);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       blogService.setToken(user.token);
-      dispatch(setUser(user));
+      dispatch(setLoggedUser(user));
     }
   };
 };
@@ -65,10 +66,10 @@ export const logout = (user) => {
   return async (dispatch) => {
     console.log(`logging out user ${user.name}`);
     window.localStorage.removeItem("loggedBloglistAppUser");
-    dispatch(setUser(null));
+    dispatch(setLoggedUser(null));
 
     dispatch(setNotification("success", "successfully logged out", 2));
   };
 };
 
-export default userSlice.reducer;
+export default loggedUserSlice.reducer;

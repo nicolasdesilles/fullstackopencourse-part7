@@ -16,7 +16,7 @@ import Home from "./components/Home";
 import UsersList from "./components/UsersList";
 import User from "./components/User";
 import Blog from "./components/Blog";
-import Header from "./components/Header";
+import NavigationBar from "./components/NavigationBar";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -42,13 +42,12 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <Notification type={notification.type} />
 
-      {loggedUser ? <Header /> : ""}
+      <NavigationBar />
 
-      <Router>
-        <Routes>
+      <Routes>
           <Route
             path="/login"
             element={loggedUser ? <Navigate replace to="/" /> : <LoginForm />}
@@ -70,8 +69,7 @@ const App = () => {
           <Route path="/users/:id" element={<User />} />
           <Route path="/blogs/:id" element={<Blog />} />
         </Routes>
-      </Router>
-    </div>
+    </Router>
   );
 };
 

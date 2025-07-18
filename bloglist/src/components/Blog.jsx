@@ -1,13 +1,23 @@
-import { useState } from "react";
+import { addLikeTo, deleteBlog } from "../reducers/blogsReducer";
+import { setNotification } from "../reducers/notificationsReducer";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 
-const Blog = ({ blog, onLikeClicked, onDeleteClicked }) => {
-  const [visible, setVisible] = useState(false);
+const Blog = () => {
+  const dispatch = useDispatch();
+
+  const blogs = useSelector((state) => state.blogs);
+
+  const id = useParams().id;
+  const blog = blogs.find((b) => b.id === id);
+
+  if (!blog) {
+    return null;
+  }
 
   const loggedUserJSON = window.localStorage.getItem("loggedBloglistAppUser");
   const loggedUser = loggedUserJSON ? JSON.parse(loggedUserJSON) : null;
 
-  const hideWhenVisible = { display: visible ? "none" : "" };
-  const showWhenVisible = { display: visible ? "" : "none" };
   const deleteButtonVisibility = {
     display:
       loggedUser !== null && loggedUser.username === blog.user.username
@@ -15,14 +25,24 @@ const Blog = ({ blog, onLikeClicked, onDeleteClicked }) => {
         : "none",
   };
 
+  const like = async () => {
+    console.log("like", blog.id);
+    dispatch(addLikeTo(blog.id));
+    dispatch(setNotification("success", `you liked '${blog.title}'`, 4));
+  };
+
+  const remove = async () => {
+    console.log("delete", blog.id);
+    dispatch(deleteBlog(blog));
+    dispatch(setNotification("success", `you deleted '${blog.title}'`, 4));
+  };
+
   const blogStyle = {
     border: "2px outset #000000",
     padding: "5px",
     margin: "2px",
   };
-  const detailsStyle = {
-    margin: "5px",
-  };
+
   const titleStyle = {
     fontWeight: "bold",
   };
@@ -33,47 +53,27 @@ const Blog = ({ blog, onLikeClicked, onDeleteClicked }) => {
     textDecoration: "underline solid #000000",
   };
 
-  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
-
   return (
     <div style={blogStyle}>
       <span style={titleStyle}>{blog.title}</span> by{" "}
       <span style={authorStyle}>{blog.author}</span>
-      <div style={hideWhenVisible}>
-        <div>
-          <span>
-            {" "}
-            <button onClick={toggleVisibility}>view</button>{" "}
-          </span>
-        </div>
+      <div>
+        <span style={fieldNameStyle}>url:</span> <span>{blog.url}</span>
       </div>
-      <div style={showWhenVisible}>
+      <div>
+        <span style={fieldNameStyle}>likes: {blog.likes}</span>{" "}
         <span>
-          {" "}
-          <button onClick={toggleVisibility}>hide</button>{" "}
+          <button onClick={like}>like</button>
         </span>
-        <div style={detailsStyle}>
-          <div>
-            <span style={fieldNameStyle}>url:</span> <span>{blog.url}</span>
-          </div>
-          <div>
-            <span style={fieldNameStyle}>likes: {blog.likes}</span>{" "}
-            <span>
-              <button onClick={onLikeClicked}>like</button>
-            </span>
-          </div>
-          <div>
-            <span style={fieldNameStyle}>added by:</span>{" "}
-            <span>{blog.user.name}</span>
-          </div>
-          <div>
-            <span style={deleteButtonVisibility}>
-              <button onClick={onDeleteClicked}>remove</button>
-            </span>
-          </div>
-        </div>
+      </div>
+      <div>
+        <span style={fieldNameStyle}>added by:</span>{" "}
+        <span>{blog.user.name}</span>
+      </div>
+      <div>
+        <span style={deleteButtonVisibility}>
+          <button onClick={remove}>remove</button>
+        </span>
       </div>
     </div>
   );

@@ -30,30 +30,44 @@ const LoginForm = () => {
 
   return (
     <div>
-      <h2>log in to the app</h2>
-      <form onSubmit={onSubmit}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+      <div class="flex justify-center">
+        <div class="card bg-base-200 w-96 shadow-sm">
+          <div class="card-body">
+            <h2 class="card-title">Login</h2>
+            <form onSubmit={onSubmit}>
+              <div>
+                <legend class="fieldset-legend">Username</legend>
+                <input
+                  class="input"
+                  type="text"
+                  value={username}
+                  name="Username"
+                  onChange={({ target }) => setUsername(target.value)}
+                />
+              </div>
+              <div>
+                <legend class="fieldset-legend">Password</legend>
+                <input
+                  class="input"
+                  type="password"
+                  value={password}
+                  name="Password"
+                  onChange={({ target }) => setPassword(target.value)}
+                />
+              </div>
+              <div class="card-actions justify-end pt-4 ">
+                <button
+                  class="btn btn-primary"
+                  type="submit"
+                  data-testid="login-button"
+                >
+                  login
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit" data-testid="login-button">
-          login
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

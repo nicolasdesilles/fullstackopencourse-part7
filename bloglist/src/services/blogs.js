@@ -44,11 +44,28 @@ const update = async (updatedBlog) => {
     likes: updatedBlog.likes,
   };
 
-  console.log("updating ", `${baseUrl}/${updatedBlog.id}`);
+  //console.log("updating ", `${baseUrl}/${updatedBlog.id}`);
 
   const response = await axios.put(
     `${baseUrl}/${updatedBlog.id}`,
     newBlog,
+    config
+  );
+  return response.data;
+};
+
+const addComment = async (id, comment) => {
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const content = {
+    comment: comment,
+  };
+
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    content,
     config
   );
   return response.data;
@@ -63,4 +80,4 @@ const remove = async (blogToDelete) => {
   return response.data;
 };
 
-export default { getAll, get, setToken, create, update, remove };
+export default { getAll, get, setToken, create, update, remove, addComment };

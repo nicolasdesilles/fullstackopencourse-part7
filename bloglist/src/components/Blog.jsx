@@ -1,9 +1,11 @@
-import { addLikeTo, deleteBlog } from "../reducers/blogsReducer";
+import { addLikeTo, deleteBlog, addCommentTo } from "../reducers/blogsReducer";
 import { setNotification } from "../reducers/notificationsReducer";
 import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 const Blog = () => {
+  const [currentComment, setCurrentComment] = useState("");
   const dispatch = useDispatch();
 
   const blogs = useSelector((state) => state.blogs);
@@ -26,15 +28,25 @@ const Blog = () => {
   };
 
   const like = async () => {
-    console.log("like", blog.id);
+    //console.log("like", blog.id);
     dispatch(addLikeTo(blog.id));
     dispatch(setNotification("success", `you liked '${blog.title}'`, 4));
   };
 
   const remove = async () => {
-    console.log("delete", blog.id);
+    //console.log("delete", blog.id);
     dispatch(deleteBlog(blog));
     dispatch(setNotification("success", `you deleted '${blog.title}'`, 4));
+  };
+
+  const comment = async (event) => {
+    event.preventDefault();
+    //console.log("like", blog.id);
+    dispatch(addCommentTo(id, currentComment));
+    dispatch(
+      setNotification("success", `you commented '${currentComment}'`, 4)
+    );
+    setCurrentComment("");
   };
 
   const blogStyle = {
@@ -77,6 +89,17 @@ const Blog = () => {
       </div>
       <div>
         <h2>comments</h2>
+        <div>
+          <form onSubmit={comment}>
+            <input
+              type="text"
+              value={currentComment}
+              name="Comment"
+              onChange={({ target }) => setCurrentComment(target.value)}
+            />
+            <button type="submit">add</button>
+          </form>
+        </div>
         <ul>
           {blog.comments.map((comment) => (
             <li key={blog.comments.indexOf(comment)}>{comment}</li>

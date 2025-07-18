@@ -26,7 +26,7 @@ export const initializeBlogs = () => {
 
 export const createBlog = (content) => {
   return async (dispatch) => {
-    console.log("create content", content);
+    //console.log("create content", content);
     const newBlog = await blogsService.create(content);
     dispatch(appendBlog(newBlog));
   };
@@ -40,6 +40,14 @@ export const addLikeTo = (id) => {
       likes: blogToChange.likes + 1,
     };
     await blogsService.update(changedAnecdote);
+    const blogs = await blogsService.getAll();
+    dispatch(setBlogs(blogs));
+  };
+};
+
+export const addCommentTo = (id, comment) => {
+  return async (dispatch) => {
+    await blogsService.addComment(id, comment);
     const blogs = await blogsService.getAll();
     dispatch(setBlogs(blogs));
   };

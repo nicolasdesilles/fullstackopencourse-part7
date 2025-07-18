@@ -75,6 +75,14 @@ const Blog = () => {
           <button onClick={remove}>remove</button>
         </span>
       </div>
+      <div>
+        <h2>comments</h2>
+        <ul>
+          {blog.comments.map((comment) => (
+            <li key={blog.comments.indexOf(comment)}>{comment}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

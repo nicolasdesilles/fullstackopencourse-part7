@@ -14,6 +14,7 @@ import Notification from "./components/Notification";
 import LoginForm from "./components/LoginForm";
 import Home from "./components/Home";
 import UsersList from "./components/UsersList";
+import User from "./components/User";
 import Header from "./components/Header";
 
 const App = () => {
@@ -61,6 +62,7 @@ const App = () => {
               loggedUser ? <UsersList /> : <Navigate replace to="/login" />
             }
           />
+          <Route path="/users/:id" element={<User />} />
         </Routes>
       </Router>
     </div>

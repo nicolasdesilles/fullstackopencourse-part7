@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: garden --default;
@@ -6,4 +7,8 @@
   exclude:;
   prefix:;
   logs: true;
+}
+@plugin "@tailwindcss/typography";
+@theme {
+  --font-sans: "Geist", sans-serif;
 }

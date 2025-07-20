@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 
 import { initializeBlogs } from "../reducers/blogsReducer";
 
-
 import BlogForm from "./BlogForm";
 import BlogList from "./BlogList";
 
@@ -22,10 +21,8 @@ const Home = () => {
   const createNewBlogFormRef = useRef();
 
   return (
-    <div>
-      <Togglable buttonLabel="create new blog" ref={createNewBlogFormRef}>
-        <h2>create a new blog entry</h2>
-
+    <div className="m-8 prose grid grid-cols-1 gap-4">
+      <Togglable buttonLabel="Create new blog" ref={createNewBlogFormRef}>
         <BlogForm />
       </Togglable>
 

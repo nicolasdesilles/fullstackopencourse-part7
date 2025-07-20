@@ -36,36 +36,44 @@ const BlogForm = () => {
   };
 
   return (
-    <div>
+    <div className="prose">
       <form onSubmit={addNewBlog}>
-        <div>
-          title:
+        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+          <legend className="fieldset-legend">Add a new blog</legend>
+
+          <label className="label">Title</label>
           <input
             type="text"
             value={title}
             name="Title"
+            className="input"
+            placeholder="Blog Title"
             onChange={({ target }) => setTitle(target.value)}
           />
-        </div>
-        <div>
-          author:
+
+          <label className="label">Author</label>
           <input
             type="text"
             value={author}
             name="Author"
+            className="input"
+            placeholder="Author Name"
             onChange={({ target }) => setAuthor(target.value)}
           />
-        </div>
-        <div>
-          url:
+
+          <label className="label">Url</label>
           <input
             type="url"
             value={url}
             name="URL"
+            className="input"
+            placeholder="URL"
             onChange={({ target }) => setUrl(target.value)}
           />
-        </div>
-        <button type="submit">create</button>
+          <button className="btn btn-neutral mt-4" type="submit">
+            Create
+          </button>
+        </fieldset>
       </form>
     </div>
   );

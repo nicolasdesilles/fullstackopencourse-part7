@@ -29,45 +29,37 @@ const LoginForm = () => {
   };
 
   return (
-    <div>
-      <div class="flex justify-center">
-        <div class="card bg-base-200 w-96 shadow-sm">
-          <div class="card-body">
-            <h2 class="card-title">Login</h2>
-            <form onSubmit={onSubmit}>
-              <div>
-                <legend class="fieldset-legend">Username</legend>
-                <input
-                  class="input"
-                  type="text"
-                  value={username}
-                  name="Username"
-                  onChange={({ target }) => setUsername(target.value)}
-                />
-              </div>
-              <div>
-                <legend class="fieldset-legend">Password</legend>
-                <input
-                  class="input"
-                  type="password"
-                  value={password}
-                  name="Password"
-                  onChange={({ target }) => setPassword(target.value)}
-                />
-              </div>
-              <div class="card-actions justify-end pt-4 ">
-                <button
-                  class="btn btn-primary"
-                  type="submit"
-                  data-testid="login-button"
-                >
-                  login
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+    <div className="h-dvh flex items-center justify-center">
+      <form onSubmit={onSubmit}>
+        <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+          <legend className="fieldset-legend">Login</legend>
+
+          <label className="label">Username</label>
+          <input
+            className="input"
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+
+          <label className="label">Password</label>
+          <input
+            className="input"
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+          <button
+            className="btn btn-accent"
+            type="submit"
+            data-testid="login-button"
+          >
+            Login
+          </button>
+        </fieldset>
+      </form>
     </div>
   );
 };

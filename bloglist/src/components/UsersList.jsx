@@ -22,26 +22,31 @@ const UsersList = () => {
   }
 
   return (
-    <div>
+    <div className="m-8 prose">
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Blogs Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td>{user.blogs.length}</td>
+      <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-200">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th></th>
+              <th>User Name</th>
+              <th>Blogs Created</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id} className="hover:bg-base-300">
+                <th>{users.indexOf(user)}</th>
+                <td>
+                  <Link to={`/users/${user.id}`}>{user.name}</Link>
+                </td>
+                <td>{user.blogs.length}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

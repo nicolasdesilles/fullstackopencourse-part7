@@ -7,11 +7,6 @@ const Togglable = forwardRef(({ children, buttonLabel }, refs) => {
   const hideWhenVisible = { display: visible ? "none" : "" };
   const showWhenVisible = { display: visible ? "" : "none" };
 
-  const buttonStyle = {
-    marginTop: "10px",
-    marginBottom: "10px",
-  };
-
   const toggleVisibility = () => {
     setVisible(!visible);
   };
@@ -26,7 +21,7 @@ const Togglable = forwardRef(({ children, buttonLabel }, refs) => {
     <div>
       <div style={hideWhenVisible}>
         <button
-          style={buttonStyle}
+          className="btn btn-soft btn-accent"
           onClick={toggleVisibility}
           data-testid="createblog-button"
         >
@@ -35,8 +30,16 @@ const Togglable = forwardRef(({ children, buttonLabel }, refs) => {
         </button>
       </div>
       <div style={showWhenVisible}>
-        {children}
-        <button onClick={toggleVisibility}> cancel </button>
+        <div className="w-full grid grid-cols-1 gap-2">
+          <div>{children}</div>
+          <button
+            className="btn btn-soft btn-neutral w-xs"
+            onClick={toggleVisibility}
+          >
+            {" "}
+            Cancel{" "}
+          </button>
+        </div>
       </div>
     </div>
   );

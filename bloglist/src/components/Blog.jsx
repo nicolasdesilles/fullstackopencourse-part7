@@ -49,55 +49,68 @@ const Blog = () => {
     setCurrentComment("");
   };
 
-  const blogStyle = {
-    border: "2px outset #000000",
-    padding: "5px",
-    margin: "2px",
-  };
-
-  const titleStyle = {
-    fontWeight: "bold",
-  };
-  const authorStyle = {
-    fontStyle: "italic",
-  };
-  const fieldNameStyle = {
-    textDecoration: "underline solid #000000",
-  };
-
   return (
-    <div style={blogStyle}>
-      <span style={titleStyle}>{blog.title}</span> by{" "}
-      <span style={authorStyle}>{blog.author}</span>
-      <div>
-        <span style={fieldNameStyle}>url:</span> <span>{blog.url}</span>
+    <div className="prose m-8 flex gap-6 justify-start ">
+      <div className="bg-base-300 p-8 rounded-box">
+        <h2>{blog.title}</h2>{" "}
+        <div className="flex gap-3">
+          <em>by:</em>
+          <div>
+            <b>{blog.author}</b>
+          </div>
+        </div>
+        <div className="flex gap-3">
+          <em>URL:</em>{" "}
+          <div>
+            <b>{blog.url}</b>
+          </div>
+        </div>
+        <div className="flex gap-3 align-center">
+          <div>
+            <em>Likes:</em>
+          </div>{" "}
+          <div>
+            <b>{blog.likes}</b>
+          </div>
+          <button className="btn btn-info btn-xs" onClick={like}>
+            like
+          </button>
+        </div>
+        <div className="flex gap-3">
+          <em>added by:</em>{" "}
+          <div>
+            <b>{blog.user.name}</b>
+          </div>
+        </div>
+        <div>
+          <span style={deleteButtonVisibility}>
+            <button className="btn btn-soft bent-neutral" onClick={remove}>
+              remove
+            </button>
+          </span>
+        </div>
       </div>
-      <div>
-        <span style={fieldNameStyle}>likes: {blog.likes}</span>{" "}
-        <span>
-          <button onClick={like}>like</button>
-        </span>
-      </div>
-      <div>
-        <span style={fieldNameStyle}>added by:</span>{" "}
-        <span>{blog.user.name}</span>
-      </div>
-      <div>
-        <span style={deleteButtonVisibility}>
-          <button onClick={remove}>remove</button>
-        </span>
-      </div>
-      <div>
-        <h2>comments</h2>
+
+      <div className="bg-base-300 p-8 rounded-box">
+        <h3>Comments</h3>
         <div>
           <form onSubmit={comment}>
-            <input
-              type="text"
-              value={currentComment}
-              name="Comment"
-              onChange={({ target }) => setCurrentComment(target.value)}
-            />
-            <button type="submit">add</button>
+            <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+              <legend className="fieldset-legend">Add a comment</legend>
+
+              <label className="label">Your comment</label>
+              <input
+                type="text"
+                value={currentComment}
+                name="Comment"
+                className="input"
+                placeholder="Type your comment"
+                onChange={({ target }) => setCurrentComment(target.value)}
+              />
+              <button type="submit" className="btn btn-neutral mt-4">
+                Add
+              </button>
+            </fieldset>
           </form>
         </div>
         <ul>

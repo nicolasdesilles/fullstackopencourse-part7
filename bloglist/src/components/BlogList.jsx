@@ -4,21 +4,37 @@ import { Link } from "react-router-dom";
 const BlogList = () => {
   const blogs = useSelector((state) => state.blogs);
 
-  const blogStyle = {
-    border: "2px outset #000000",
-    padding: "5px",
-    margin: "2px",
-  };
-
   return (
-    <div>
-      <h2>blogs list</h2>
+    <div className="prose w-full">
+      <h2>Blogs List</h2>
+
       <div>
-        {blogs.map((blog) => (
-          <div style={blogStyle} key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>{" "}
-          </div>
-        ))}
+        <ul className="list bg-accent text-primary-content rounded-box shadow-md">
+          <li className="p-4 pb-2 text-xs opacity-60 tracking-wide">
+            All blogs added by users
+          </li>
+          {blogs.map((blog) => (
+            <li className="list-row flex justify-between" key={blog.id}>
+              <div>
+                <div>
+                  <Link
+                    className="text-l no-prose text-primary-content"
+                    to={`/blogs/${blog.id}`}
+                  >
+                    {blog.title}
+                  </Link>
+                </div>
+                <div className="flex gap-2">
+                  <em className="text-xs font-semibold opacity-60">by:</em>
+                  <div className="text-xs uppercase font-semibold opacity-60">
+                    {blog.author}
+                  </div>
+                </div>
+              </div>
+              <div>{blog.likes} likes</div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
